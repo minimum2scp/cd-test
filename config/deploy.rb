@@ -24,7 +24,7 @@ set :repo_url, 'git@github.com:minimum2scp/cd-test.git'
 
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
-set :linked_files, %w[config/database.yml config/secrets.yml]
+set :linked_files, %w[config/database.yml config/secrets.yml .env]
 
 # Default value for linked_dirs is []
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
@@ -64,6 +64,7 @@ namespace :deploy do
   task :upload_shared do
     invoke 'deploy:upload_database_yml'
     invoke 'deploy:upload_secrets_yml'
+    invoke 'deploy:upload_dotenv'
   end
 
   task :upload_database_yml do
@@ -75,6 +76,12 @@ namespace :deploy do
   task :upload_secrets_yml do
     on roles(:app) do
       upload! 'config/secrets.yml', "#{shared_path}/config/secrets.yml"
+    end
+  end
+
+  task :upload_dotenv do
+    on roles(:app) do
+      upload! '.env', "#{shared_path}/.env"
     end
   end
 end
