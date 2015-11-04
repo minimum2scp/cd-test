@@ -7,7 +7,6 @@ export -p
 pwd
 ls -la
 
-
 mkdir -p vendor/bundle
-bundle install --path=vendor/bundle --jobs=4 --without development:test
-bundle exec cap ${DEPLOY_ENV} deploy BRANCH=${BRANCH}
+rbenv exec bundle install --path=vendor/bundle --jobs=4 --without development:test
+rbenv exec bundle exec cap ${DEPLOY_ENV} deploy BRANCH=${BRANCH}
