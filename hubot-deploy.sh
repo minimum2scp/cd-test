@@ -13,4 +13,4 @@ export -p
 
 mkdir -p vendor/bundle
 rbenv exec bundle install --path=vendor/bundle --jobs=4 --without development:test
-rbenv exec bundle exec cap ${DEPLOY_ENV} deploy BRANCH=${BRANCH}
+rbenv exec bundle exec cap --trace ${DEPLOY_ENV} deploy BRANCH=${BRANCH}
