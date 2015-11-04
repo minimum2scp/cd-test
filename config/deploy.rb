@@ -53,7 +53,7 @@ set :bundle_binstubs,  nil
 ### capistrano3-unicorn (https://github.com/tablexi/capistrano3-unicorn)
 ###
 set :unicorn_pid,                  "#{shared_path}/tmp/pids/unicorn.pid"
-set :unicorn_config_path,          nil
+set :unicorn_config_path,          "#{current_path}/config/unicorn.rb"
 set :unicorn_restart_sleep_time,   10
 
 namespace :deploy do
