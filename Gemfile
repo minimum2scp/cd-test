@@ -47,6 +47,7 @@ end
 
 gem 'mysql2', '~> 0.3.20'
 gem 'unicorn'
+gem 'dotenv-rails', :require => 'dotenv/rails'
 group :deployment do
   gem 'capistrano'
   gem 'capistrano-rails'
