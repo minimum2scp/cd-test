@@ -10,6 +10,7 @@ ls -la
 unset GEM_HOME GEM_PATH RUBYLIB RUBYOPT
 rbenv exec gem env
 export -p
+ssh-add -l
 
 mkdir -p vendor/bundle
 rbenv exec bundle install --path=vendor/bundle --jobs=4 --without development:test
