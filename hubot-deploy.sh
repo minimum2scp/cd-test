@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash -l
 
 set -e
 set -x
@@ -8,7 +8,6 @@ pwd
 ls -la
 
 
-. /etc/profile.d/rbenv.sh
 mkdir -p vendor/bundle
 bundle install --path=vendor/bundle --jobs=4 --without development:test
 bundle exec cap ${DEPLOY_ENV} deploy BRANCH=${BRANCH}
