@@ -1,8 +1,8 @@
 # config valid only for current version of Capistrano
 lock '3.4.0'
 
-set :application, 'my_app_name'
-set :repo_url, 'git@example.com:me/my_repo.git'
+set :application, 'cd-test'
+set :repo_url, 'git@github.com:minimum2scp/cd-test.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -24,9 +24,11 @@ set :repo_url, 'git@example.com:me/my_repo.git'
 
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
+set :linked_files, %w[config/database.yml config/secrets.yml]
 
 # Default value for linked_dirs is []
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system]
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -34,15 +36,46 @@ set :repo_url, 'git@example.com:me/my_repo.git'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-namespace :deploy do
+###
+### capistrano-rbenv (https://github.com/capistrano/rbenv/)
+###
+set :rbenv_ruby,    '2.2.3'
+set :rbenv_type,    :system
+set :rbenv_path,    '/opt/rbenv'
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+###
+### capistrano-bundler (https://github.com/capistrano/bundler)
+###
+set :bundle_jobs,      4
+set :bundle_binstubs,  nil
+
+###
+### capistrano3-unicorn (https://github.com/tablexi/capistrano3-unicorn)
+###
+set :unicorn_pid,                  "#{shared_path}/tmp/pids/unicorn.pid"
+set :unicorn_config_path,          nil
+set :unicorn_restart_sleep_time,   10
+
+namespace :deploy do
+  task :restart do
+    invoke 'unicorn:legacy_restart'
+  end
+
+  task :upload_shared do
+    invoke 'deploy:upload_database_yml'
+    invoke 'deploy:upload_secrets_yml'
+  end
+
+  task :upload_database_yml do
+    on roles(:app) do
+      upload! 'config/database.yml', "#{shared_path}/config/database.yml"
     end
   end
 
+  task :upload_secrets_yml do
+    on roles(:app) do
+      upload! 'config/secrets.yml', "#{shared_path}/config/secrets.yml"
+    end
+  end
 end
+
