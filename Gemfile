@@ -46,3 +46,12 @@ group :development do
 end
 
 gem 'mysql2', '~> 0.3.20'
+gem 'unicorn'
+group :deployment do
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-bundler'
+  gem 'capistrano3-unicorn'
+end
+
